@@ -22,6 +22,13 @@ Skill 目录：`skills/financial-analysis/SKILL.md`
 ### macOS / Linux
 
 ```bash
+curl -fsSL https://raw.githubusercontent.com/Nicky-zzy/bank-corporate-credit-skills/main/install.sh -o /tmp/install.sh
+bash /tmp/install.sh
+```
+
+或先克隆仓库再执行：
+
+```bash
 git clone https://github.com/Nicky-zzy/bank-corporate-credit-skills.git ~/.bank-credit-skills
 bash ~/.bank-credit-skills/install.sh
 ```
@@ -61,17 +68,19 @@ cat ~/.doubao/agent_mode/workspace/.skills/financial-analysis/.installed-version
 
 ## 四、更新（同事无需操作）
 
-### 方案 A：定时自动拉取（推荐）
+> 仓库一般一两周才更新一次，同步不必按天跑，**每周一次足够**；想立刻拿到新版，用方案 B 手动跑一下即可。
+
+### 方案 A：每周自动拉取（推荐）
 
 macOS / Linux：
 
 ```bash
 crontab -e
-# 每天早上 8 点静默同步，输出记到日志
-0 8 * * * $HOME/.bank-credit-skills/install.sh --quiet >> $HOME/.bank-credit-skills/sync.log 2>&1
+# 每周一早上 8 点静默同步（一次 fetch，成本很低），输出记到日志
+0 8 * * 1 $HOME/.bank-credit-skills/install.sh --quiet >> $HOME/.bank-credit-skills/sync.log 2>&1
 ```
 
-Windows（任务计划程序，每天 8:00）：
+Windows（任务计划程序，每周一 8:00）：
 
 ```
 程序：powershell
@@ -115,11 +124,11 @@ bank-corporate-credit-skills/
 **Q3：更新后 AI 还是旧版本？**
 先确认 `.installed-version` 已变；再**新开一个会话**。技能列表在会话启动时扫描，旧会话不会热更新。
 
-**Q4：同事能不能不改文件，只在对话里说一句“用这个 skill”？**
-可以，但属于临时方案：AI 每次要去仓库现读，不入技能列表、不自动触发、慢且耗 token。日常使用仍建议安装。
+**Q4：多个 skill 想一起分发？**
+每个 skill 放自己的子目录（`skills/<skill-name>/SKILL.md`），`install.sh` 会自动遍历 `skills/*/`，无需改脚本。
 
-**Q5：多个 skill 一起分发？**
-每个 skill 放自己的子目录（`skills/<skill-name>/SKILL.md`），脚本会自动扫描并同步全部。
+**Q5：同事能不能不改文件，只在对话里说一句“用这个 skill”？**
+可以，但属于临时方案：AI 每次要去仓库现读，不入技能列表、不自动触发、慢且耗 token。日常使用仍建议安装。
 
 ## 七、维护约定
 
